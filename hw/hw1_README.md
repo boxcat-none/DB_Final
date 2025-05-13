@@ -1,6 +1,6 @@
 ## 作業一
 
-![hw1 Diagram](../hw1.png)
+![hw1 Diagram](./hw1.png)
 
 ### Customer Table
 **Schema**: customerNo, customerName, customerStreet, customerCity, customerState, customerZipCode, custTelNo, custFaxNo, DOB, maritalStatus, creditRating  
