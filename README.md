@@ -239,7 +239,7 @@ jane_smith | ETH    | buy              | 10.0   | 2900.00 | 2025-05-02 12:00:00
 | E002       | Mary      | Johnson  | Clerk    | 2021-03-10  |
 | E003       | David     | Lee      | Clerk    | 2022-06-20  |
 
-## CUSTOMER (At least 3 customers)
+## CUSTOMER 
 | customerNO | customerName | customerCity | DOB        | creditRating |
 |------------|--------------|--------------|------------|--------------|
 | C001       | Alice Brown  | New York     | 1990-05-12 | A            |
