@@ -1,6 +1,6 @@
 ## 作業一
 
-![hw1 Diagram](./hw1.png)
+![hw1-1 Diagram](./hw1-1.png)
 
 ### Customer Table
 **Schema**: customerNo, customerName, customerStreet, customerCity, customerState, customerZipCode, custTelNo, custFaxNo, DOB, maritalStatus, creditRating  
@@ -98,3 +98,65 @@
 | SM001     | Express        |
 | SM002     | Standard       |
 | SM003     | Overnight      |
+
+![hw1-1 Diagram](./hw1-2.png)
+
+### Product Table
+**Schema**: productNo, productName, serialNo, unitPrice, quantityOnHand, reorderLevel, reorderQuantity, reorderLeadTime, categoryNo  
+**Primary Key**: productNo  
+**Alternate Key**: serialNo  
+**Foreign Key**: categoryNo (ProductCategory)
+
+| productNo | productName    | serialNo    | unitPrice | quantityOnHand | reorderLevel | reorderQuantity | reorderLeadTime | categoryNo |
+|-----------|----------------|-------------|-----------|----------------|--------------|-----------------|-----------------|------------|
+| P001      | Laptop         | SN123456    | 1200.00   | 50             | 10           | 20              | 7 days          | CAT01      |
+| P002      | Smartphone     | SN789012    | 600.00    | 100            | 20           | 30              | 5 days          | CAT02      |
+| P003      | Headphones     | SN345678    | 80.00     | 150            | 50           | 100             | 3 days          | CAT03      |
+
+### ProductCategory Table
+**Schema**: categoryNo, categoryDescription  
+**Primary Key**: categoryNo  
+**Alternate Key**: None  
+**Foreign Key**: None
+
+| categoryNo | categoryDescription |
+|------------|---------------------|
+| CAT01      | Electronics         |
+| CAT02      | Mobile Devices      |
+| CAT03      | Audio Equipment     |
+
+### PurchaseOrder Table
+**Schema**: purchaseOrderNo, purchaseOrderDescription, orderDate, dateRequired, shippedDate, freightCharge, supplierNo, employeeNo  
+**Primary Key**: purchaseOrderNo  
+**Alternate Key**: None  
+**Foreign Keys**: supplierNo (Supplier), employeeNo (Employee)
+
+| purchaseOrderNo | purchaseOrderDescription | orderDate  | dateRequired | shippedDate | freightCharge | supplierNo | employeeNo |
+|-----------------|--------------------------|------------|--------------|-------------|---------------|------------|------------|
+| PO001           | Laptop Order             | 2025-01-10 | 2025-01-20   | 2025-01-15  | 50.00         | SUP001     | E001       |
+| PO002           | Smartphone Restock       | 2025-02-05 | 2025-02-15   | NULL        | 30.00         | SUP002     | E002       |
+| PO003           | Headphone Order          | 2025-03-01 | 2025-03-10   | 2025-03-05  | 20.00         | SUP003     | E003       |
+
+### Supplier Table
+**Schema**: supplierNo, supplierName, supplierStreet, supplierCity, supplierState, supplierZipCode, suppTelNo, suppFaxNo, suppEmailAddress, suppWebAddress, contactName, contactTelNo, contactFaxNo, contactEmailAddress, paymentTerms  
+**Primary Key**: supplierNo  
+**Alternate Keys**: supplierName, suppTelNo, suppFaxNo  
+**Foreign Key**: None
+
+| supplierNo | supplierName       | supplierStreet     | supplierCity | supplierState | supplierZipCode | suppTelNo   | suppFaxNo   | suppEmailAddress         | suppWebAddress            | contactName | contactTelNo | contactFaxNo | contactEmailAddress      | paymentTerms |
+|------------|--------------------|--------------------|--------------|---------------|-----------------|-------------|-------------|--------------------------|---------------------------|-------------|--------------|--------------|--------------------------|--------------|
+| SUP001     | TechTrend Inc.     | 123 Tech Road      | Taipei       | Taipei City   | 100             | 0212345678  | 0212345679  | sales@techtrend.com      | www.techtrend.com         | Amy Lin     | 0912345678   | 0212345680   | amy.lin@techtrend.com    | Net 30       |
+| SUP002     | MobileWorld Ltd.   | 456 Mobile Ave     | Kaohsiung    | Kaohsiung City| 802             | 0223456789  | 0223456790  | info@mobileworld.com     | www.mobileworld.com       | Bob Chen    | 0923456789   | 0223456791   | bob.chen@mobileworld.com | Net 15       |
+| SUP003     | AudioPro Co.       | 789 Sound Street   | Taichung     | Taichung City | 403             | 0234567890  | 0234567891  | support@audiopro.com     | www.audiopro.com          | Clara Wu    | 0934567890   | 0234567892   | clara.wu@audiopro.com    | Net 45       |
+
+### Transaction Table
+**Schema**: transactionNo, transactionDate, transactionDescription, unitPrice, unitsOrdered, unitsReceived, unitsSold, unitsWastage, productNo, purchaseOrderNo  
+**Primary Key**: transactionNo  
+**Alternate Key**: None  
+**Foreign Keys**: productNo (Product), purchaseOrderNo (PurchaseOrder)
+
+| transactionNo | transactionDate | transactionDescription | unitPrice | unitsOrdered | unitsReceived | unitsSold | unitsWastage | productNo | purchaseOrderNo |
+|---------------|-----------------|-------------------------|-----------|--------------|---------------|-----------|--------------|-----------|-----------------|
+| TRX001        | 2025-01-15      | Laptop Purchase         | 1200.00   | 20           | 20            | 15        | 0            | P001      | PO001           |
+| TRX002        | 2025-02-10      | Smartphone Restock      | 600.00    | 30           | 28            | 20        | 2            | P002      | PO002           |
+| TRX003        | 2025-03-05      | Headphone Order         | 80.00     | 100          | 100           | 80        | 5            | P003      | PO003           |
