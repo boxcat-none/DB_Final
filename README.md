@@ -230,3 +230,49 @@ jane_smith | ETH    | buy              | 10.0   | 2900.00 | 2025-05-02 12:00:00
   * `transaction_type` 限制只能為 `'buy'` 或 `'sell'`。
 
 ---
+# Customer Order Entry Data
+
+## EMPLOYEE (At least 3 employees)
+| employeeNO | firstName | lastName | position | dateStarted |
+|------------|-----------|----------|----------|-------------|
+| E001       | John      | Smith    | Manager  | 2020-01-15  |
+| E002       | Mary      | Johnson  | Clerk    | 2021-03-10  |
+| E003       | David     | Lee      | Clerk    | 2022-06-20  |
+
+## CUSTOMER (At least 3 customers)
+| customerNO | customerName | customerCity | DOB        | creditRating |
+|------------|--------------|--------------|------------|--------------|
+| C001       | Alice Brown  | New York     | 1990-05-12 | A            |
+| C002       | Bob White    | Chicago      | 1985-08-20 | B            |
+| C003       | Carol Green  | Los Angeles  | 1992-03-15 | A            |
+
+## PRODUCT (At least 5 products)
+| productNO | productName | unitPrice | quantityOnHand | reorderLevel |
+|-----------|-------------|-----------|----------------|--------------|
+| P001      | Laptop      | 1200      | 50             | 10           |
+| P002      | Mouse       | 25        | 200            | 50           |
+| P003      | Keyboard    | 45        | 150            | 30           |
+| P004      | Monitor     | 300       | 80             | 20           |
+| P005      | Headphones  | 60        | 100            | 25           |
+
+## ORDER (Each customer with 1-3 orders)
+| orderNO | orderDate  | customerNO | employeeNO | status   | promisedDate |
+|---------|------------|------------|------------|----------|--------------|
+| O001    | 2025-05-01 | C001       | E001       | Shipped  | 2025-05-05   |
+| O002    | 2025-05-02 | C001       | E002       | Pending  | 2025-05-06   |
+| O003    | 2025-05-03 | C001       | E003       | Shipped  | 2025-05-07   |
+| O004    | 2025-05-04 | C002       | E001       | Shipped  | 2025-05-08   |
+| O005    | 2025-05-05 | C002       | E002       | Pending  | 2025-05-09   |
+| O006    | 2025-05-06 | C003       | E003       | Shipped  | 2025-05-10   |
+
+## ORDERDETAIL
+| orderNO | productNO | quantityOrdered |
+|---------|-----------|-----------------|
+| O001    | P001      | 1               |
+| O001    | P002      | 2               |
+| O002    | P003      | 1               |
+| O003    | P004      | 1               |
+| O004    | P002      | 3               |
+| O004    | P005      | 1               |
+| O005    | P001      | 1               |
+| O006    | P003      | 2               |
