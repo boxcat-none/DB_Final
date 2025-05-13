@@ -276,3 +276,46 @@ jane_smith | ETH    | buy              | 10.0   | 2900.00 | 2025-05-02 12:00:00
 | O004    | P005      | 1               |
 | O005    | P001      | 1               |
 | O006    | P003      | 2               |
+# Inventory Control Data
+
+## EMPLOYEE
+| employeeNO | firstName | lastName | position | dateStarted |
+|------------|-----------|----------|----------|-------------|
+| E001       | John      | Smith    | Manager  | 2020-01-15  |
+| E002       | Mary      | Johnson  | Clerk    | 2021-03-10  |
+| E003       | David     | Lee      | Clerk    | 2022-06-20  |
+
+## PRODUCT
+| productNO | productName | unitPrice | quantityOnHand | reorderLevel | categoryNO |
+|-----------|-------------|-----------|----------------|--------------|------------|
+| P001      | Laptop      | 1200      | 50             | 10           | CAT01      |
+| P002      | Mouse       | 25        | 200            | 50           | CAT02      |
+| P003      | Keyboard    | 45        | 150            | 30           | CAT02      |
+| P004      | Monitor     | 300       | 80             | 20           | CAT01      |
+| P005      | Headphones  | 60        | 100            | 25           | CAT02      |
+
+## PRODUCTCATEGORY
+| categoryNO | categoryDescription |
+|------------|---------------------|
+| CAT01      | Electronics         |
+| CAT02      | Accessories         |
+
+## SUPPLIER
+| supplierNO | supplierName | supplierCity | suppTelNo   | paymentTerms |
+|------------|--------------|--------------|-------------|--------------|
+| S001       | TechCorp     | San Francisco| 555-0101    | Net 30       |
+| S002       | AccSupply    | Seattle      | 555-0102    | Net 15       |
+
+## PURCHASEORDER
+| purchaseOrderNO | orderDate  | dateRequired | supplierNO | employeeNO |
+|-----------------|------------|--------------|------------|------------|
+| PO001           | 2025-05-01 | 2025-05-10   | S001       | E001       |
+| PO002           | 2025-05-02 | 2025-05-12   | S002       | E002       |
+| PO003           | 2025-05-03 | 2025-05-15   | S001       | E003       |
+
+## TRANSACTION
+| transactionNO | transactionDate | transactionDescription | unitPrice | unitsOrdered | unitsReceived | productNO | purchaseOrderNO |
+|---------------|-----------------|------------------------|-----------|--------------|---------------|-----------|-----------------|
+| T001          | 2025-05-10      | Received Laptops       | 1200      | 10           | 10            | P001      | PO001           |
+| T002          | 2025-05-12      | Received Mice          | 25        | 50           | 50            | P002      | PO002           |
+| T003          | 2025-05-15      | Received Monitors      | 300       | 20           | 20            | P004      | PO003           |
