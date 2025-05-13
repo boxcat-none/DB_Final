@@ -232,7 +232,7 @@ jane_smith | ETH    | buy              | 10.0   | 2900.00 | 2025-05-02 12:00:00
 ---
 # Customer Order Entry Data
 
-## EMPLOYEE (At least 3 employees)
+## EMPLOYEE 
 | employeeNO | firstName | lastName | position | dateStarted |
 |------------|-----------|----------|----------|-------------|
 | E001       | John      | Smith    | Manager  | 2020-01-15  |
@@ -246,7 +246,7 @@ jane_smith | ETH    | buy              | 10.0   | 2900.00 | 2025-05-02 12:00:00
 | C002       | Bob White    | Chicago      | 1985-08-20 | B            |
 | C003       | Carol Green  | Los Angeles  | 1992-03-15 | A            |
 
-## PRODUCT (At least 5 products)
+## PRODUCT 
 | productNO | productName | unitPrice | quantityOnHand | reorderLevel |
 |-----------|-------------|-----------|----------------|--------------|
 | P001      | Laptop      | 1200      | 50             | 10           |
@@ -255,7 +255,7 @@ jane_smith | ETH    | buy              | 10.0   | 2900.00 | 2025-05-02 12:00:00
 | P004      | Monitor     | 300       | 80             | 20           |
 | P005      | Headphones  | 60        | 100            | 25           |
 
-## ORDER (Each customer with 1-3 orders)
+## ORDER 
 | orderNO | orderDate  | customerNO | employeeNO | status   | promisedDate |
 |---------|------------|------------|------------|----------|--------------|
 | O001    | 2025-05-01 | C001       | E001       | Shipped  | 2025-05-05   |
