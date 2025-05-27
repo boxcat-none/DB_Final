@@ -92,6 +92,54 @@
 | password\_hash | VARCHAR | 密碼（加密）     |
 | email          | VARCHAR | 電子郵件       |
 
+### 完整性限制說明
+
+**id**：
+- 約束：主鍵（PRIMARY KEY），非空（NOT NULL），自動遞增（AUTO_INCREMENT）
+- 是否可重複：不可重複
+- 長度限制：INT，32 位整數，範圍 -2,147,483,648 到 2,147,483,647
+- 特殊符號限制：僅限整數數值
+- 資料型態：INT，整數型態，儲存整數值
+
+**username**：
+- 約束：非空（NOT NULL）
+- 是否可重複：允許重複
+- 長度限制：VARCHAR(50)，最多 50 個字符
+- 特殊符號限制：支援字母、數字、下劃線、連字符
+- 資料型態：VARCHAR(50)，可變長度字串
+
+**password_hash**：
+- 約束：非空（NOT NULL）
+- 是否可重複：允許重複
+- 長度限制：VARCHAR(255)，最多 255 個字符
+- 特殊符號限制：支援所有字符
+- 資料型態：VARCHAR(255)，可變長度字串
+
+**email**：
+- 約束：非空（NOT NULL），唯一（UNIQUE）
+- 是否可重複：不可重複
+- 長度限制：VARCHAR(100)，最多 100 個字符
+- 特殊符號限制：支援字母、數字、點、連字符、下劃線、@
+- 資料型態：VARCHAR(100)，可變長度字串
+
+### 舉例
+
+```
+id | username       | password_hash         | email
+---+---------------+-----------------------+-------------------------
+1  | john_doe      | hashed_password_123   | john@example.com
+2  | jane_smith    | hashed_password_456   | jane@example.com
+3  | alex_wong     | hashed_password_789   | alex.wong@example.com
+4  | emily_chen    | hashed_password_101   | emily.chen@example.com
+5  | michael_lee   | hashed_password_202   | michael.lee@example.com
+6  | sarah_kim     | hashed_password_303   | sarah.kim@example.com
+7  | david_park    | hashed_password_404   | david.park@example.com
+8  | laura_wu      | hashed_password_505   | laura.wu@example.com
+9  | chris_tan     | hashed_password_606   | chris.tan@example.com
+10 | sophia_liu    | hashed_password_707   | sophia.liu@example.com
+```
+
+
 ### 2. 幣種表（cryptos）
 
 | 欄位名稱           | 類型      | 描述            |
@@ -100,6 +148,53 @@
 | symbol         | VARCHAR | 幣種代號（BTC、ETH） |
 | name           | VARCHAR | 幣種名稱          |
 | current\_price | DECIMAL | 當前價格          |
+
+### 完整性限制說明
+
+**id**：
+- 約束：主鍵（PRIMARY KEY），非空（NOT NULL），自動遞增（AUTO_INCREMENT）
+- 是否可重複：不可重複
+- 長度限制：INT，32 位整數，範圍 -2,147,483,648 到 2,147,483,647
+- 特殊符號限制：僅限整數數值
+- 資料型態：INT，整數型態，儲存整數值
+
+**symbol**：
+- 約束：非空（NOT NULL），唯一（UNIQUE）
+- 是否可重複：不可重複
+- 長度限制：VARCHAR(10)，最多 10 個字符
+- 特殊符號限制：僅限大寫字母、數字
+- 資料型態：VARCHAR(10)，可變長度字串
+
+**name**：
+- 約束：非空（NOT NULL）
+- 是否可重複：允許重複
+- 長度限制：VARCHAR(50)，最多 50 個字符
+- 特殊符號限制：支援字母、數字、空格、連字符
+- 資料型態：VARCHAR(50)，可變長度字串
+
+**current_price**：
+- 約束：非空（NOT NULL）
+- 是否可重複：允許重複
+- 長度限制：DECIMAL(15, 2)，總長 15 位，含 2 位小數
+- 特殊符號限制：僅限數字、小數點
+- 資料型態：DECIMAL(15, 2)，固定精度十進位數
+
+### 舉例
+
+```
+id | symbol | name            | current_price
+---+--------+-----------------+---------------
+1  | BTC    | Bitcoin         | 60000.50
+2  | ETH    | Ethereum        | 3000.25
+3  | BNB    | Binance Coin    | 600.75
+4  | ADA    | Cardano         | 1.85
+5  | XRP    | Ripple          | 0.95
+6  | SOL    | Solana          | 150.30
+7  | DOT    | Polkadot        | 20.45
+8  | DOGE   | Dogecoin        | 0.35
+9  | MATIC  | Polygon         | 1.20
+10 | LINK   | Chainlink       | 25.60
+```
 
 ### 3. 持倉表（holdings）
 
@@ -110,6 +205,60 @@
 | crypto\_id | INT     | 幣種 ID（外鍵）  |
 | amount     | DECIMAL | 持有數量       |
 | buy\_price | DECIMAL | 買入價格       |
+
+### 完整性限制說明
+
+**id**：
+- 約束：主鍵（PRIMARY KEY），非空（NOT NULL），自動遞增（AUTO_INCREMENT）
+- 是否可重複：不可重複
+- 長度限制：INT，32 位整數，範圍 0 到 2,147,483,647，從1開始
+- 特殊符號限制：僅限整數數值
+- 資料型態：INT，整數型態，儲存整數值
+
+**user_id**：
+- 約束：非空（NOT NULL），外鍵（FOREIGN KEY REFERENCES users(id)）
+- 是否可重複：允許重複
+- 長度限制：INT，與 users.id 一致
+- 特殊符號限制：僅限整數數值
+- 資料型態：INT，整數型態，儲存整數值
+
+**crypto_id**：
+- 約束：非空（NOT NULL），外鍵（FOREIGN KEY REFERENCES cryptos(id)）
+- 是否可重複：允許重複
+- 長度限制：INT，與 cryptos.id 一致
+- 特殊符號限制：僅限整數數值
+- 資料型態：INT，整數型態，儲存整數值
+
+**amount**：
+- 約束：非空（NOT NULL），CHECK (amount >= 0)
+- 是否可重複：允許重複
+- 長度限制：DECIMAL(15, 8)，總長 15 位，含 8 位小數
+- 特殊符號限制：僅限數字、小數點
+- 資料型態：DECIMAL(15, 8)，固定精度十進位數
+
+**buy_price**：
+- 約束：非空（NOT NULL），CHECK (buy_price >= 0)
+- 是否可重複：允許重複
+- 長度限制：DECIMAL(15, 2)，總長 15 位，含 2 位小數
+- 特殊符號限制：僅限數字、小數點
+- 資料型態：DECIMAL(15, 2)，固定精度十進位數
+
+### 舉例
+
+```
+id | user_id | crypto_id | amount       | buy_price
+---+---------+-----------+--------------+-----------
+1  | 1       | 1         | 0.50000000   | 58000.00
+2  | 2       | 2         | 10.00000000  | 2900.00
+3  | 3       | 3         | 15.00000000  | 590.00
+4  | 4       | 4         | 1000.00000000| 1.70
+5  | 5       | 5         | 5000.00000000| 0.90
+6  | 6       | 6         | 20.00000000  | 140.00
+7  | 7       | 7         | 50.00000000  | 19.50
+8  | 8       | 8         | 10000.00000000| 0.30
+9  | 9       | 9         | 800.00000000 | 1.10
+10 | 10      | 10        | 40.00000000  | 24.00
+```
 
 ### 4. 交易紀錄表（transactions）
 
@@ -123,6 +272,73 @@
 | price             | DECIMAL   | 交易價格       |
 | timestamp         | TIMESTAMP | 交易時間       |
 
+### 完整性限制說明
+
+**id**：
+- 約束：主鍵（PRIMARY KEY），非空（NOT NULL），自動遞增（AUTO_INCREMENT）
+- 是否可重複：不可重複
+- 長度限制：INT，32 位整數，範圍 -2,147,483,648 到 2,147,483,647
+- 特殊符號限制：僅限整數數值
+- 資料型態：INT，整數型態，儲存整數值
+
+**user_id**：
+- 約束：非空（NOT NULL），外鍵（FOREIGN KEY REFERENCES users(id)）
+- 是否可重複：允許重複
+- 長度限制：INT，與 users.id 一致
+- 特殊符號限制：僅限整數數值
+- 資料型態：INT，整數型態，儲存整數值
+
+**crypto_id**：
+- 約束：非空（NOT NULL），外鍵（FOREIGN KEY REFERENCES cryptos(id)）
+- 是否可重複：允許重複
+- 長度限制：INT，與 cryptos.id 一致
+- 特殊符號限制：僅限整數數值
+- 資料型態：INT，整數型態，儲存整數值
+
+**transaction_type**：
+- 約束：非空（NOT NULL），CHECK (transaction_type IN ('buy', 'sell'))
+- 是否可重複：允許重複
+- 長度限制：VARCHAR(10)，最多 10 個字符
+- 特殊符號限制：僅限 "buy" 或 "sell"
+- 資料型態：VARCHAR(10)，可變長度字串
+
+**amount**：
+- 約束：非空（NOT NULL），CHECK (amount > 0)
+- 是否可重複：允許重複
+- 長度限制：DECIMAL(15, 8)，總長 15 位，含 8 位小數
+- 特殊符號限制：僅限數字、小數點
+- 資料型態：DECIMAL(15, 8)，固定精度十進位數
+
+**price**：
+- 約束：非空（NOT NULL），CHECK (price >= 0)
+- 是否可重複：允許重複
+- 長度限制：DECIMAL(15, 2)，總長 15 位，含 2 位小數
+- 特殊符號限制：僅限數字、小數點
+- 資料型態：DECIMAL(15, 2)，固定精度十進位數
+
+**timestamp**：
+- 約束：非空（NOT NULL），DEFAULT CURRENT_TIMESTAMP
+- 是否可重複：允許重複
+- 長度限制：TIMESTAMP，範圍 1970-01-01 00:00:01 到 2038-01-19 03:14:07 UTC
+- 特殊符號限制：格式 YYYY-MM-DD HH:MM:SS，僅限數字、連字符、冒號、空格
+- 資料型態：TIMESTAMP，時間戳型態，儲存日期和時間
+
+### 舉例
+
+```
+id | username      | symbol | transaction_type | amount       | price    | timestamp
+---+---------------+--------+------------------+--------------+----------+-------------------------
+1  | john_doe      | BTC    | buy              | 0.50000000   | 58000.00 | 2025-05-01 10:00:00
+2  | jane_smith    | ETH    | buy              | 10.00000000  | 2900.00  | 2025-05-02 12:00:00
+3  | alex_wong     | BNB    | buy              | 15.00000000  | 590.00   | 2025-05-03 14:30:00
+4  | emily_chen    | ADA    | buy              | 1000.00000000| 1.70     | 2025-05-04 09:15:00
+5  | michael_lee   | XRP    | buy              | 5000.00000000| 0.90     | 2025-05-05 11:45:00
+6  | sarah_kim     | SOL    | buy              | 20.00000000  | 140.00   | 2025-05-06 16:20:00
+7  | david_park    | DOT    | sell             | 25.00000000  | 21.00    | 2025-05-07 08:00:00
+8  | laura_wu      | DOGE   | buy              | 10000.00000000| 0.30    | 2025-05-08 13:10:00
+9  | chris_tan     | MATIC  | sell             | 400.00000000 | 1.25     | 2025-05-09 15:25:00
+10 | sophia_liu    | LINK   | buy              | 40.00000000  | 24.00    | 2025-05-10 17:50:00
+```
 ---
 
 ## ER Diagram
@@ -176,57 +392,3 @@ CREATE TABLE transactions (
 ```
 ---
 
-## 舉例說明
-
-### 1. 使用者表（users）
-
-```
-id | username    | password_hash       | email
----+-------------+---------------------+----------------------
-1  | john_doe    | hashed_password_123 | john@example.com
-2  | jane_smith  | hashed_password_456 | jane@example.com
-```
-
-### 2. 幣種表（cryptos）
-
-```
-id | symbol | name     | current_price
----+--------+----------+---------------
-1  | BTC    | Bitcoin  | 60000.50
-2  | ETH    | Ethereum | 3000.25
-```
-
-### 3. 持倉表（holdings）
-
-```
-id | user_id | crypto_id | amount | buy_price
----+---------+-----------+--------+-----------
-1  | 1       | 1         | 0.5    | 58000.00
-2  | 2       | 2         | 10.0   | 2900.00
-```
-
-### 4. 交易紀錄表（transactions）
-
-```
-username   | symbol | transaction_type | amount | price   | timestamp
------------+--------+------------------+--------+---------+-------------------------
-john_doe   | BTC    | buy              | 0.5    | 58000.00| 2025-05-01 10:00:00
-jane_smith | ETH    | buy              | 10.0   | 2900.00 | 2025-05-02 12:00:00
-```
-
----
-
-## 設計說明
-
-* **主鍵與外鍵**：每個表的主鍵為 `id`，`holdings` 與 `transactions` 表中的 `user_id` 與 `crypto_id` 分別為外鍵，參照 `users` 和 `cryptos` 表。
-* **資料類型**：
-
-  * `DECIMAL(15, 2)` 用於價格，保留兩位小數。
-  * `DECIMAL(15, 8)` 用於加密貨幣數量，小數點後八位。
-  * `TIMESTAMP` 使用 `DEFAULT CURRENT_TIMESTAMP`。
-* **約束條件**：
-
-  * `users.email` 與 `cryptos.symbol` 為唯一值。
-  * `transaction_type` 限制只能為 `'buy'` 或 `'sell'`。
-
----
