@@ -390,5 +390,16 @@ CREATE TABLE transactions (
     FOREIGN KEY (crypto_id) REFERENCES cryptos(id)
 );
 ```
+
+## 團隊分工
+
+* **組長**：王忠仁（boxcat-none）
+  **工作內容**：自我介紹、功能特色、系統需求、資料庫結構、完整性限制說明、舉例、資料庫Schema(SQL)
+
+* **組員**：張家誠（Adsgfjhk）
+  **工作內容**：自我介紹、ER Diagram
+
+* **組員**：劉向宏（liuleo0518）
+  **工作內容**：自我介紹
 ---
 
