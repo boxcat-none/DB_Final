@@ -919,7 +919,7 @@ id | user_id | crypto_id | transaction_type | amount           | price       | t
   **工作內容**：自我介紹、Schema Diagram、功能特色、系統需求
 
 * **組員**：劉向宏（[liuleo0518](https://github.com/liuleo0518)）
-  **工作內容**：自我介紹、資料庫結構、舉例、完整性限制說明
+  **工作內容**：自我介紹、資料庫結構、舉例、完整性限制說明、ER Diagram
 ---
 
 ## 7. 報告連結
