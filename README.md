@@ -16,29 +16,29 @@
     - [管理員（Admin）](#管理員admin)
     - [超級管理員（Super Admin）](#超級管理員super-admin)
 - [3. ER Diagram](#3-er-diagram)
-- [4. 資料庫結構](#4-資料庫結構)
-  - [4.1 使用者表（users）](#41-使用者表users)
-  - [4.2 使用者憑證表（user_credentials）](#42-使用者憑證表user_credentials)
-  - [4.3 幣種表（cryptos）](#43-幣種表cryptos)
-  - [4.4 歷史價格表（crypto_prices）](#44-歷史價格表crypto_prices)
-  - [4.5 持倉表（holdings）](#45-持倉表holdings)
-  - [4.6 交易紀錄表（transactions）](#46-交易紀錄表transactions)
-- [5. 資料庫 Schema (SQL)](#5-資料庫-schema)
-- [6. 視圖 (View)](#6-視圖-view)
-  - [6.1 使用者管理](#61-使用者管理)
+- [4. 資料庫Schema及完整性限制](#4-資料庫schema及完整性限制)
+  - [4.1 Schema Diagram](#41-schema-diagram)
+  - [4.2 使用者表（users）](#42-使用者表users)
+  - [4.3 使用者憑證表（user_credentials）](#43-使用者憑證表user_credentials)
+  - [4.4 幣種表（cryptos）](#44-幣種表cryptos)
+  - [4.5 歷史價格表（crypto_prices）](#45-歷史價格表crypto_prices)
+  - [4.6 持倉表（holdings）](#46-持倉表holdings)
+  - [4.7 交易紀錄表（transactions）](#47-交易紀錄表transactions)
+- [5. 視圖 (View)](#5-視圖-view)
+  - [5.1 使用者管理](#51-使用者管理)
     - [使用者資料視圖（v_user_profile）](#使用者資料視圖v_user_profile)
-  - [6.2 資產管理](#62-資產管理)
+  - [5.2 資產管理](#52-資產管理)
     - [(1) 持倉概覽視圖（v_user_holdings）](#1-持倉概覽視圖v_user_holdings)
     - [(2) 投資表現視圖（v_user_investment_performance）](#2-投資表現視圖v_user_investment_performance)
-  - [6.3 交易紀錄](#63-交易紀錄)
+  - [5.3 交易紀錄](#53-交易紀錄)
     - [交易歷史視圖（v_user_transactions）](#交易歷史視圖v_user_transactions)
-  - [6.4 市場資訊與分析](#64-市場資訊與分析)
+  - [5.4 市場資訊與分析](#54-市場資訊與分析)
     - [(1) 實時行情視圖（v_market_realtime）](#1-實時行情視圖v_market_realtime)
     - [(2) K 線圖視圖（v_kline_data）](#2-k-線圖視圖v_kline_data)
-  - [6.5 視圖總覽與權限](#65-視圖總覽與權限)
-- [7. 團隊分工](#7-團隊分工)
-- [8. 報告連結](#8-報告連結)
-- [9. 參考資料](#9-參考資料)
+  - [5.5 視圖總覽與權限](#55-視圖總覽與權限)
+- [6. 團隊分工](#6-團隊分工)
+- [7. 報告連結](#7-報告連結)
+- [8. 參考資料](#8-參考資料)
 
 ## 1. 專案概述
 
@@ -53,15 +53,15 @@
 
 您好！我們是虎尾科技大學四資工三乙的學生，以下是我們專題的成員自我介紹：
 
-* **組長**：王忠仁（boxcat-none）
+* **組長**：王忠仁（[boxcat-none](https://github.com/boxcat-none)）
   **學號**：41143209
   **興趣**：觀看 YouTube 的旅遊、美食影片，並從中學習各種知識。
 
-* **組員**：張家誠（Adsgfjhk）
+* **組員**：張家誠（[Adsgfjhk](https://github.com/Adsgfjhk)）
   **學號**：41143231
   **興趣**：閱讀科技與程式設計文章、手遊與打球放鬆。
 
-* **組員**：劉向宏（liuleo0518）
+* **組員**：劉向宏（[liuleo0518](https://github.com/liuleo0518)）
   **學號**：41143248
   **興趣**：打網球（體育績優升學）、現專注於資訊工程。
 
@@ -116,9 +116,13 @@
 ## 3. ER Diagram
 
 ![ER Diagram](./ER_Diagram.png)
-## 4. 資料庫結構
 
-### 4.1 使用者表（users）
+## 4. 資料庫Schema及完整性限制
+
+### 4.1 Schema Diagram
+![Schema Diagram](./Schema_Diagram.png)
+
+### 4.2 使用者表（users）
 
 | 欄位名稱     | 類型      | 描述         |
 |--------------|-----------|--------------|
@@ -129,52 +133,44 @@
 
 #### 完整性限制說明
 
-**id**：
-- 約束：主鍵（PRIMARY KEY），非空（NOT NULL），自動遞增（AUTO_INCREMENT）
-- 是否可重複：不可重複
-- 長度限制：INT，32 位整數，範圍 -2,147,483,648 到 2,147,483,647
-- 特殊符號限制：僅限整數數值
-- 資料型態：INT，整數型態，儲存整數值
+| 欄位      | 約束                                      | 是否可重複 | 長度限制                   | 特殊符號限制         | 資料型態         |
+|-----------|-------------------------------------------|------------|----------------------------|----------------------|------------------|
+| id        | 主鍵（PRIMARY KEY），非空（NOT NULL），自動遞增（AUTO_INCREMENT） | 不可重複   | INT，32 位整數，範圍 1 到 2,147,483,647 | 僅限整數數值    | INT，整數型態，儲存整數值 |
+| username  | 非空（NOT NULL）                          | 允許重複   | VARCHAR(50)，最多 50 個字符  | 支援字母、數字、下劃線、連字符 | VARCHAR(50)，可變長度字串 |
+| email     | 非空（NOT NULL），唯一（UNIQUE）           | 不可重複   | VARCHAR(100)，最多 100 個字符 | 支援字母、數字、點、連字符、下劃線、@ | VARCHAR(100)，可變長度字串 |
+| role      | 非空（NOT NULL），CHECK (role IN ('super_admin', 'admin', 'user')) | 允許重複 | VARCHAR(20)，最多 20 個字符  | 僅限 'super_admin'、'admin'、'user' | VARCHAR(20)，可變長度字串 |
 
-**username**：
-- 約束：非空（NOT NULL）
-- 是否可重複：允許重複
-- 長度限制：VARCHAR(50)，最多 50 個字符
-- 特殊符號限制：支援字母、數字、下劃線、連字符
-- 資料型態：VARCHAR(50)，可變長度字串
-
-**email**：
-- 約束：非空（NOT NULL），唯一（UNIQUE）
-- 是否可重複：不可重複
-- 長度限制：VARCHAR(100)，最多 100 個字符
-- 特殊符號限制：支援字母、數字、點、連字符、下劃線、@
-- 資料型態：VARCHAR(100)，可變長度字串
-
-**role**：
-- 約束：非空（NOT NULL），CHECK (role IN ('super_admin', 'admin', 'user'))
-- 是否可重複：允許重複
-- 長度限制：VARCHAR(20)，最多 20 個字符
-- 特殊符號限制：僅限 'super_admin'、'admin'、'user'
-- 資料型態：VARCHAR(20)，可變長度字串
-
+#### SQL
+```sql
+CREATE TABLE users (
+    id INT NOT NULL AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    role VARCHAR(20) NOT NULL CHECK (role IN ('super_admin', 'admin', 'user')),
+    PRIMARY KEY (id),
+    UNIQUE (email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
 #### 舉例
 
+
 ```
-id | username      | email                   | role
----+---------------+-------------------------+------------
-1  | john_doe      | john@example.com        | super_admin
-2  | jane_smith    | jane@example.com        | admin
-3  | alex_wong     | alex.wong@example.com   | admin
-4  | emily_chen    | emily.chen@example.com  | user
-5  | michael_lee   | michael.lee@example.com | user
-6  | sarah_kim     | sarah.kim@example.com   | user
-7  | david_park    | david.park@example.com  | user
-8  | laura_wu      | laura.wu@example.com    | user
-9  | chris_tan     | chris.tan@example.com   | user
-10 | sophia_liu    | sophia.liu@example.com  | user
+id | username       | email                     | role
+---+---------------+---------------------------+------------
+1  | john_doe      | john.doe@example.com      | super_admin
+2  | jane_smith    | jane.smith@example.com    | admin
+3  | alex_wong     | alex.wong@example.com     | admin
+4  | emily_chen    | emily.chen@example.com    | user
+5  | michael_lee   | michael.lee@example.com   | user
+6  | sarah_kim     | sarah.kim@example.com     | user
+7  | david_park    | david.park@example.com    | user
+8  | laura_wu      | laura.wu@example.com      | user
+9  | chris_tan     | chris.tan@example.com     | user
+10 | sophia_liu    | sophia.liu@example.com    | user
 ```
 
-### 4.2 使用者憑證表（user_credentials）
+
+### 4.3 使用者憑證表（user_credentials）
 
 | 欄位名稱       | 類型      | 描述         |
 |----------------|-----------|--------------|
@@ -183,38 +179,40 @@ id | username      | email                   | role
 
 #### 完整性限制說明
 
-**user_id**：
-- 約束：主鍵（PRIMARY KEY），非空（NOT NULL），外鍵（FOREIGN KEY REFERENCES users(id) ON DELETE CASCADE）
-- 是否可重複：不可重複
-- 長度限制：INT，32 位整數，範圍 -2,147,483,648 到 2,147,483,647
-- 特殊符號限制：僅限整數數值
-- 資料型態：INT，整數型態，儲存整數值
+| 欄位         | 約束                                      | 是否可重複 | 長度限制                   | 特殊符號限制         | 資料型態         |
+|--------------|-------------------------------------------|------------|----------------------------|----------------------|------------------|
+| user_id      | 主鍵（PRIMARY KEY），非空（NOT NULL），外鍵（FOREIGN KEY REFERENCES users(id) ON DELETE CASCADE） | 不可重複   | INT，32 位整數，範圍 1 到 2,147,483,647 | 僅限整數數值    | INT，整數型態，儲存整數值 |
+| password_hash| 非空（NOT NULL）                          | 允許重複   | VARCHAR(255)，最多 255 個字符 | 支援所有字符         | VARCHAR(255)，可變長度字串 |
 
-**password_hash**：
-- 約束：非空（NOT NULL）
-- 是否可重複：允許重複
-- 長度限制：VARCHAR(255)，最多 255 個字符
-- 特殊符號限制：支援所有字符
-- 資料型態：VARCHAR(255)，可變長度字串
+#### SQL
+```sql
+-- 使用者憑證表
+CREATE TABLE user_credentials (
+    user_id INT NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    PRIMARY KEY (user_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
 
 #### 舉例
 
 ```
 user_id | password_hash
 --------+---------------------- 
-1       | hashed_password_123
-2       | hashed_password_456
-3       | hashed_password_789
-4       | hashed_password_101
-5       | hashed_password_202
-6       | hashed_password_303
-7       | hashed_password_404
-8       | hashed_password_505
-9       | hashed_password_606
-10      | hashed_password_707
+1       | hash_123456
+2       | hash_789012
+3       | hash_345678
+4       | hash_901234
+5       | hash_567890
+6       | hash_234567
+7       | hash_890123
+8       | hash_456789
+9       | hash_012345
+10      | hash_678901
 ```
 
-### 4.3 幣種表（cryptos）
+### 4.4 幣種表（cryptos）
 
 | 欄位名稱       | 類型      | 描述            |
 |----------------|-----------|-----------------|
@@ -225,51 +223,43 @@ user_id | password_hash
 
 #### 完整性限制說明
 
-**id**：
-- 約束：主鍵（PRIMARY KEY），非空（NOT NULL），自動遞增（AUTO_INCREMENT）
-- 是否可重複：不可重複
-- 長度限制：INT，32 位整數，範圍 -2,147,483,648 到 2,147,483,647
-- 特殊符號限制：僅限整數數值
-- 資料型態：INT，整數型態，儲存整數值
+| 欄位          | 約束                                      | 是否可重複 | 長度限制                   | 特殊符號限制         | 資料型態         |
+|---------------|-------------------------------------------|------------|----------------------------|----------------------|------------------|
+| id            | 主鍵（PRIMARY KEY），非空（NOT NULL），自動遞增（AUTO_INCREMENT） | 不可重複   | INT，32 位整數，範圍 1 到 2,147,483,647 | 僅限整數數值    | INT，整數型態，儲存整數值 |
+| symbol        | 非空（NOT NULL），唯一（UNIQUE）           | 不可重複   | VARCHAR(10)，最多 10 個字符 | 僅限大寫字母、數字   | VARCHAR(10)，可變長度字串 |
+| name          | 非空（NOT NULL）                          | 允許重複   | VARCHAR(50)，最多 50 個字符 | 支援字母、數字、空格、連字符 | VARCHAR(50)，可變長度字串 |
+| current_price | 非空（NOT NULL），CHECK (current_price >= 0) | 允許重複   | DECIMAL(18, 5)，總長 18 位，含 5 位小數 | 僅限數字、小數點 | DECIMAL(18, 5)，固定精度十進位數 |
 
-**symbol**：
-- 約束：非空（NOT NULL），唯一（UNIQUE）
-- 是否可重複：不可重複
-- 長度限制：VARCHAR(10)，最多 10 個字符
-- 特殊符號限制：僅限大寫字母、數字
-- 資料型態：VARCHAR(10)，可變長度字串
-
-**name**：
-- 約束：非空（NOT NULL）
-- 是否可重複：允許重複
-- 長度限制：VARCHAR(50)，最多 50 個字符
-- 特殊符號限制：支援字母、數字、空格、連字符
-- 資料型態：VARCHAR(50)，可變長度字串
-
-**current_price**：
-- 約束：非空（NOT NULL），CHECK (current_price >= 0)
-- 是否可重複：允許重複
-- 長度限制：DECIMAL(18, 5)，總長 18 位，含 5 位小數
-- 特殊符號限制：僅限數字、小數點
-- 資料型態：DECIMAL(18, 5)，固定精度十進位數
+#### SQL
+```sql
+CREATE TABLE cryptos (
+    id INT NOT NULL AUTO_INCREMENT,
+    symbol VARCHAR(10) NOT NULL UNIQUE,
+    name VARCHAR(50) NOT NULL,
+    current_price DECIMAL(18, 5) NOT NULL CHECK (current_price >= 0),
+    PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
 
 #### 舉例
 
 ```
 id | symbol | name            | current_price
 ---+--------+-----------------+---------------
-1  | BTC    | Bitcoin         | 60000.50000
-2  | ETH    | Ethereum        | 3000.25000
-3  | BNB    | Binance Coin    | 600.75000
-4  | ADA    | Cardano         | 1.85000
-5  | XRP    | Ripple          | 0.95000
-6  | SOL    | Solana          | 150.30000
-7  | DOT    | Polkadot        | 20.45000
-8  | DOGE   | Dogecoin        | 0.35000
-9  | MATIC  | Polygon         | 1.20000
-10 | LINK   | Chainlink       | 25.60000
+1  | BTC    | Bitcoin         | 65000.75000
+2  | ETH    | Ethereum        | 3200.50000
+3  | BNB    | Binance Coin    | 620.25000
+4  | ADA    | Cardano         | 2.15000
+5  | XRP    | Ripple          | 1.05000
+6  | SOL    | Solana          | 165.80000
+7  | DOT    | Polkadot        | 22.75000
+8  | DOGE   | Dogecoin        | 0.40000
+9  | MATIC  | Polygon         | 1.35000
+10 | LINK   | Chainlink       | 28.90000
+11 | SHIB   | Shiba Inu       | 0.00002500
+12 | LTC    | Litecoin        | 180.60000
 ```
-### 4.4 歷史價格表（crypto_prices）
+### 4.5 歷史價格表（crypto_prices）
 
 | 欄位名稱      | 類型        | 描述              |
 |---------------|-------------|-------------------|
@@ -283,73 +273,60 @@ id | symbol | name            | current_price
 
 #### 完整性限制說明
 
-**crypto_id**：
-- 約束：非空（NOT NULL），外鍵（FOREIGN KEY REFERENCES cryptos(id) ON DELETE CASCADE），主鍵的一部分
-- 是否可重複：與 timestamp 組合不可重複
-- 長度限制：INT，32 位整數，範圍 -2,147,483,648 到 2,147,483,647
-- 特殊符號限制：僅限整數數值
-- 資料型態：INT，整數型態，儲存整數值
+| 欄位         | 約束                                      | 是否可重複           | 長度限制                            | 特殊符號限制               | 資料型態                     |
+|--------------|-------------------------------------------|----------------------|-------------------------------------|----------------------------|------------------------------|
+| crypto_id    | 非空（NOT NULL），外鍵（FOREIGN KEY REFERENCES cryptos(id) ON DELETE CASCADE），主鍵的一部分 | 與 timestamp 組合不可重複 | INT，32 位整數，範圍 1 到 2,147,483,647 | 僅限整數數值          | INT，整數型態，儲存整數值     |
+| timestamp    | 非空（NOT NULL），主鍵的一部分             | 與 crypto_id 組合不可重複 | TIMESTAMP，範圍 1970-01-01 00:00:01 到 2038-01-19 03:14:07 UTC | 格式 YYYY-MM-DD HH:MM:SS，僅限數字、連字符、冒號、空格 | TIMESTAMP，時間戳型態，儲存日期和時間 |
+| open_price   | 非空（NOT NULL），CHECK (open_price >= 0)  | 允許重複             | DECIMAL(18, 5)，總長 18 位，含 5 位小數 | 僅限數字、小數點       | DECIMAL(18, 5)，固定精度十進位數 |
+| high_price   | 非空（NOT NULL），CHECK (high_price >= 0)  | 允許重複             | DECIMAL(18, 5)，總長 18 位，含 5 位小數 | 僅限數字、小數點       | DECIMAL(18, 5)，固定精度十進位數 |
+| low_price    | 非空（NOT NULL），CHECK (low_price >= 0)   | 允許重複             | DECIMAL(18, 5)，總長 18 位，含 5 位小數 | 僅限數字、小數點       | DECIMAL(18, 5)，固定精度十進位數 |
+| close_price  | 非空（NOT NULL），CHECK (close_price >= 0) | 允許重複             | DECIMAL(18, 5)，總長 18 位，含 5 位小數 | 僅限數字、小數點       | DECIMAL(18, 5)，固定精度十進位數 |
+| volume       | 非空（NOT NULL），CHECK (volume >= 0)      | 允許重複             | DECIMAL(20, 10)，總長 20 位，含 10 位小數 | 僅限數字、小數點    | DECIMAL(20, 10)，固定精度十進位數 |
 
-**timestamp**：
-- 約束：非空（NOT NULL），主鍵的一部分
-- 是否可重複：與 crypto_id 組合不可重複
-- 長度限制：TIMESTAMP，範圍 1970-01-01 00:00:01 到 2038-01-19 03:14:07 UTC
-- 特殊符號限制：格式 YYYY-MM-DD HH:MM:SS，僅限數字、連字符、冒號、空格
-- 資料型態：TIMESTAMP，時間戳型態，儲存日期和時間
 
-**open_price**：
-- 約束：非空（NOT NULL），CHECK (open_price >= 0)
-- 是否可重複：允許重複
-- 長度限制：DECIMAL(18, 5)，總長 18 位，含 5 位小數
-- 特殊符號限制：僅限數字、小數點
-- 資料型態：DECIMAL(18, 5)，固定精度十進位數
-
-**high_price**：
-- 約束：非空（NOT NULL），CHECK (high_price >= 0)
-- 是否可重複：允許重複
-- 長度限制：DECIMAL(18, 5)，總長 18 位，含 5 位小數
-- 特殊符號限制：僅限數字、小數點
-- 資料型態：DECIMAL(18, 5)，固定精度十進位數
-
-**low_price**：
-- 約束：非空（NOT NULL），CHECK (low_price >= 0)
-- 是否可重複：允許重複
-- 長度限制：DECIMAL(18, 5)，總長 18 位，含 5 位小數
-- 特殊符號限制：僅限數字、小數點
-- 資料型態：DECIMAL(18, 5)，固定精度十進位數
-
-**close_price**：
-- 約束：非空（NOT NULL），CHECK (close_price >= 0)
-- 是否可重複：允許重複
-- 長度限制：DECIMAL(18, 5)，總長 18 位，含 5 位小數
-- 特殊符號限制：僅限數字、小數點
-- 資料型態：DECIMAL(18, 5)，固定精度十進位數
-
-**volume**：
-- 約束：非空（NOT NULL），CHECK (volume >= 0)
-- 是否可重複：允許重複
-- 長度限制：DECIMAL(20, 10)，總長 20 位，含 10 位小數
-- 特殊符號限制：僅限數字、小數點
-- 資料型態：DECIMAL(20, 10)，固定精度十進位數
+#### SQL
+```sql
+CREATE TABLE crypto_prices (
+    crypto_id INT NOT NULL,
+    timestamp TIMESTAMP NOT NULL,
+    open_price DECIMAL(18, 5) NOT NULL CHECK (open_price >= 0),
+    high_price DECIMAL(18, 5) NOT NULL CHECK (high_price >= 0),
+    low_price DECIMAL(18, 5) NOT NULL CHECK (low_price >= 0),
+    close_price DECIMAL(18, 5) NOT NULL CHECK (close_price >= 0),
+    volume DECIMAL(20, 10) NOT NULL CHECK (volume >= 0),
+    PRIMARY KEY (crypto_id, timestamp),
+    FOREIGN KEY (crypto_id) REFERENCES cryptos(id) ON DELETE CASCADE,
+    INDEX idx_timestamp (timestamp)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
 
 #### 舉例
-
 ```
 crypto_id | timestamp            | open_price  | high_price  | low_price   | close_price | volume
 ----------+---------------------+-------------+-------------+-------------+-------------+----------------
-1         | 2025-06-08 10:00:00 | 60000.50000 | 60250.75000 | 59800.25000 | 60120.30000 | 100.5000000000
-1         | 2025-06-08 11:00:00 | 60120.30000 | 60300.00000 | 60050.10000 | 60280.45000 | 120.7500000000
-2         | 2025-06-08 10:00:00 | 3000.25000  | 3050.50000  | 2980.75000  | 3020.15000  | 500.0000000000
-2         | 2025-06-08 11:00:00 | 3020.15000  | 3040.30000  | 3010.20000  | 3035.45000  | 450.2500000000
-3         | 2025-06-08 10:00:00 | 600.75000   | 610.90000   | 595.60000   | 605.30000   | 2000.0000000000
-3         | 2025-06-08 11:00:00 | 605.30000   | 615.25000   | 600.10000   | 612.45000   | 1800.5000000000
-4         | 2025-06-08 10:00:00 | 1.85000     | 1.92000     | 1.80000     | 1.90000     | 100000.0000000000
-4         | 2025-06-08 11:00:00 | 1.90000     | 1.95000     | 1.87000     | 1.93000     | 95000.0000000000
-5         | 2025-06-08 10:00:00 | 0.95000     | 0.98000     | 0.93000     | 0.96000     | 500000.0000000000
-5         | 2025-06-08 11:00:00 | 0.96000     | 0.99000     | 0.95000     | 0.97000     | 480000.0000000000
+1         | 2025-06-09 10:00:00 | 64800.50000 | 65100.75000 | 64700.25000 | 65000.30000 | 150.2500000000
+1         | 2025-06-09 11:00:00 | 65000.30000 | 65250.00000 | 64950.10000 | 65050.45000 | 180.5000000000
+2         | 2025-06-09 10:00:00 | 3180.25000  | 3220.50000  | 3170.75000  | 3200.15000  | 600.0000000000
+2         | 2025-06-09 11:00:00 | 3200.15000  | 3230.30000  | 3190.20000  | 3215.45000  | 550.7500000000
+3         | 2025-06-09 10:00:00 | 615.75000   | 625.90000   | 610.60000   | 620.30000   | 2500.0000000000
+3         | 2025-06-09 11:00:00 | 620.30000   | 630.25000   | 615.10000   | 625.45000   | 2300.5000000000
+4         | 2025-06-09 10:00:00 | 2.10000     | 2.18000     | 2.08000     | 2.15000     | 120000.0000000000
+4         | 2025-06-09 11:00:00 | 2.15000     | 2.20000     | 2.12000     | 2.18000     | 110000.0000000000
+5         | 2025-06-09 10:00:00 | 1.03000     | 1.06000     | 1.01000     | 1.05000     | 600000.0000000000
+5         | 2025-06-09 11:00:00 | 1.05000     | 1.08000     | 1.03000     | 1.06000     | 580000.0000000000
+6         | 2025-06-09 10:00:00 | 164.50000   | 166.80000   | 163.20000   | 165.30000   | 2000.0000000000
+6         | 2025-06-09 11:00:00 | 165.30000   | 167.50000   | 164.10000   | 166.20000   | 1900.5000000000
+7         | 2025-06-09 10:00:00 | 22.30000    | 23.00000    | 22.10000    | 22.75000    | 15000.0000000000
+7         | 2025-06-09 11:00:00 | 22.75000    | 23.20000    | 22.50000    | 23.00000    | 14000.0000000000
+8         | 2025-06-09 10:00:00 | 0.39000     | 0.41000     | 0.38000     | 0.40000     | 1000000.0000000000
+8         | 2025-06-09 11:00:00 | 0.40000     | 0.42000     | 0.39000     | 0.41000     | 950000.0000000000
+9         | 2025-06-09 10:00:00 | 1.32000     | 1.36000     | 1.30000     | 1.35000     | 80000.0000000000
+9         | 2025-06-09 11:00:00 | 1.35000     | 1.38000     | 1.33000     | 1.37000     | 75000.0000000000
+10        | 2025-06-09 10:00:00 | 28.50000    | 29.10000    | 28.30000    | 28.90000    | 5000.0000000000
+10        | 2025-06-09 11:00:00 | 28.90000    | 29.30000    | 28.70000    | 29.10000    | 4800.0000000000
 ```
 
-### 4.5 持倉表（holdings）
+### 4.6 持倉表（holdings）
 
 | 欄位名稱       | 類型      | 描述         |
 |----------------|-----------|--------------|
@@ -361,59 +338,51 @@ crypto_id | timestamp            | open_price  | high_price  | low_price   | clo
 
 #### 完整性限制說明
 
-**id**：
-- 約束：主鍵（PRIMARY KEY），非空（NOT NULL），自動遞增（AUTO_INCREMENT）
-- 是否可重複：不可重複
-- 長度限制：INT，32 位整數，範圍 0 到 2,147,483,647，從 1 開始
-- 特殊符號限制：僅限整數數值
-- 資料型態：INT，整數型態，儲存整數值
+| 欄位          | 約束                                      | 是否可重複 | 長度限制                   | 特殊符號限制         | 資料型態         |
+|---------------|-------------------------------------------|------------|----------------------------|----------------------|------------------|
+| id            | 主鍵（PRIMARY KEY），非空（NOT NULL），自動遞增（AUTO_INCREMENT） | 不可重複   | INT，32 位整數，範圍 1 到 2,147,483,647，從 1 開始 | 僅限整數數值    | INT，整數型態，儲存整數值 |
+| user_id       | 非空（NOT NULL），外鍵（FOREIGN KEY REFERENCES users(id) ON DELETE CASCADE） | 允許重複   | INT，與 users.id 一致      | 僅限整數數值    | INT，整數型態，儲存整數值 |
+| crypto_id     | 非空（NOT NULL），外鍵（FOREIGN KEY REFERENCES cryptos(id) ON DELETE CASCADE） | 允許重複   | INT，與 cryptos.id 一致    | 僅限整數數值    | INT，整數型態，儲存整數值 |
+| amount        | 非空（NOT NULL），CHECK (amount >= 0)      | 允許重複   | DECIMAL(20, 10)，總長 20 位，含 10 位小數 | 僅限數字、小數點 | DECIMAL(20, 10)，固定精度十進位數 |
+| avg_buy_price | 非空（NOT NULL），CHECK (avg_buy_price >= 0) | 允許重複   | DECIMAL(18, 5)，總長 18 位，含 5 位小數 | 僅限數字、小數點 | DECIMAL(18, 5)，固定精度十進位數 |
 
-**user_id**：
-- 約束：非空（NOT NULL），外鍵（FOREIGN KEY REFERENCES users(id) ON DELETE CASCADE）
-- 是否可重複：允許重複
-- 長度限制：INT，與 users.id 一致
-- 特殊符號限制：僅限整數數值
-- 資料型態：INT，整數型態，儲存整數值
-
-**crypto_id**：
-- 約束：非空（NOT NULL），外鍵（FOREIGN KEY REFERENCES cryptos(id) ON DELETE CASCADE）
-- 是否可重複：允許重複
-- 長度限制：INT，與 cryptos.id 一致
-- 特殊符號限制：僅限整數數值
-- 資料型態：INT，整數型態，儲存整數值
-
-**amount**：
-- 約束：非空（NOT NULL），CHECK (amount >= 0)
-- 是否可重複：允許重複
-- 長度限制：DECIMAL(20, 10)，總長 20 位，含 10 位小數
-- 特殊符號限制：僅限數字、小數點
-- 資料型態：DECIMAL(20, 10)，固定精度十進位數
-
-**avg_buy_price**：
-- 約束：非空（NOT NULL），CHECK (avg_buy_price >= 0)
-- 是否可重複：允許重複
-- 長度限制：DECIMAL(18, 5)，總長 18 位，含 5 位小數
-- 特殊符號限制：僅限數字、小數點
-- 資料型態：DECIMAL(18, 5)，固定精度十進位數
+#### SQL
+```sql
+CREATE TABLE holdings (
+    id INT NOT NULL AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    crypto_id INT NOT NULL,
+    amount DECIMAL(20, 10) NOT NULL CHECK (amount >= 0),
+    avg_buy_price DECIMAL(18, 5) NOT NULL CHECK (avg_buy_price >= 0),
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (crypto_id) REFERENCES cryptos(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
 
 #### 舉例
 
 ```
 id | user_id | crypto_id | amount           | avg_buy_price
 ---+---------+-----------+-----------------+---------------
-1  | 1       | 1         | 0.5000000000    | 58000.00000
-2  | 2       | 2         | 10.0000000000   | 2900.00000
-3  | 3       | 3         | 15.0000000000   | 590.00000
-4  | 4       | 4         | 1000.0000000000 | 1.70000
-5  | 5       | 5         | 5000.0000000000 | 0.90000
-6  | 6       | 6         | 20.0000000000   | 140.00000
-7  | 7       | 7         | 50.0000000000   | 19.50000
-8  | 8       | 8         | 10000.0000000000| 0.30000
-9  | 9       | 9         | 800.0000000000  | 1.10000
-10 | 10      | 10        | 40.0000000000   | 24.00000
+1  | 1       | 1         | 0.3000000000    | 64000.00000
+2  | 2       | 2         | 8.0000000000    | 3100.00000
+3  | 3       | 3         | 12.0000000000   | 600.00000
+4  | 4       | 4         | 800.0000000000  | 2.00000
+5  | 5       | 5         | 4000.0000000000 | 1.00000
+6  | 6       | 6         | 15.0000000000   | 160.00000
+7  | 7       | 7         | 40.0000000000   | 22.00000
+8  | 8       | 8         | 8000.0000000000 | 0.38000
+9  | 9       | 9         | 600.0000000000  | 1.30000
+10 | 10      | 10        | 30.0000000000   | 28.00000
+11 | 4       | 2         | 5.0000000000    | 3150.00000
+12 | 5       | 1         | 0.2000000000    | 64500.00000
+13 | 6       | 3         | 10.0000000000   | 610.00000
+14 | 7       | 4         | 500.0000000000  | 2.10000
+15 | 8       | 5         | 3000.0000000000 | 1.02000
 ```
 
-### 4.6 交易紀錄表（transactions）
+### 4.7 交易紀錄表（transactions）
 
 | 欄位名稱         | 類型        | 描述         |
 |------------------|-------------|--------------|
@@ -427,130 +396,18 @@ id | user_id | crypto_id | amount           | avg_buy_price
 
 #### 完整性限制說明
 
-**id**：
-- 約束：主鍵（PRIMARY KEY），非空（NOT NULL），自動遞增（AUTO_INCREMENT）
-- 是否可重複：不可重複
-- 長度限制：INT，32 位整數，範圍 -2,147,483,648 到 2,147,483,647
-- 特殊符號限制：僅限整數數值
-- 資料型態：INT，整數型態，儲存整數值
+| 欄位           | 約束                                      | 是否可重複 | 長度限制                   | 特殊符號限制               | 資料型態                     |
+|----------------|-------------------------------------------|------------|----------------------------|----------------------------|------------------------------|
+| id             | 主鍵（PRIMARY KEY），非空（NOT NULL），自動遞增（AUTO_INCREMENT） | 不可重複   | INT，32 位整數，範圍 1 到 2,147,483,647 | 僅限整數數值          | INT，整數型態，儲存整數值     |
+| user_id        | 非空（NOT NULL），外鍵（FOREIGN KEY REFERENCES users(id) ON DELETE CASCADE） | 允許重複   | INT，與 users.id 一致      | 僅限整數數值          | INT，整數型態，儲存整數值     |
+| crypto_id      | 非空（NOT NULL），外鍵（FOREIGN KEY REFERENCES cryptos(id) ON DELETE CASCADE） | 允許重複   | INT，與 cryptos.id 一致    | 僅限整數數值          | INT，整數型態，儲存整數值     |
+| transaction_type | 非空（NOT NULL），CHECK (transaction_type IN ('buy', 'sell')) | 允許重複   | VARCHAR(10)，最多 10 個字符 | 僅限 "buy" 或 "sell"   | VARCHAR(10)，可變長度字串     |
+| amount         | 非空（NOT NULL），CHECK (amount > 0)       | 允許重複   | DECIMAL(20, 10)，總長 20 位，含 10 位小數 | 僅限數字、小數點       | DECIMAL(20, 10)，固定精度十進位數 |
+| price          | 非空（NOT NULL），CHECK (price >= 0)       | 允許重複   | DECIMAL(18, 5)，總長 18 位，含 5 位小數 | 僅限數字、小數點       | DECIMAL(18, 5)，固定精度十進位數 |
+| timestamp      | 非空（NOT NULL），DEFAULT CURRENT_TIMESTAMP | 允許重複   | TIMESTAMP，範圍 1970-01-01 00:00:01 到 2038-01-19 03:14:07 UTC | 格式 YYYY-MM-DD HH:MM:SS，僅限數字、連字符、冒號、空格 | TIMESTAMP，時間戳型態，儲存日期和時間 |
 
-**user_id**：
-- 約束：非空（NOT NULL），外鍵（FOREIGN KEY REFERENCES users(id) ON DELETE CASCADE）
-- 是否可重複：允許重複
-- 長度限制：INT，與 users.id 一致
-- 特殊符號限制：僅限整數數值
-- 資料型態：INT，整數型態，儲存整數值
-
-**crypto_id**：
-- 約束：非空（NOT NULL），外鍵（FOREIGN KEY REFERENCES cryptos(id) ON DELETE CASCADE）
-- 是否可重複：允許重複
-- 長度限制：INT，與 cryptos.id 一致
-- 特殊符號限制：僅限整數數值
-- 資料型態：INT，整數型態，儲存整數值
-
-**transaction_type**：
-- 約束：非空（NOT NULL），CHECK (transaction_type IN ('buy', 'sell'))
-- 是否可重複：允許重複
-- 長度限制：VARCHAR(10)，最多 10 個字符
-- 特殊符號限制：僅限 "buy" 或 "sell"
-- 資料型態：VARCHAR(10)，可變長度字串
-
-**amount**：
-- 約束：非空（NOT NULL），CHECK (amount > 0)
-- 是否可重複：允許重複
-- 長度限制：DECIMAL(20, 10)，總長 20 位，含 10 位小數
-- 特殊符號限制：僅限數字、小數點
-- 資料型態：DECIMAL(20, 10)，固定精度十進位數
-
-**price**：
-- 約束：非空（NOT NULL），CHECK (price >= 0)
-- 是否可重複：允許重複
-- 長度限制：DECIMAL(18, 5)，總長 18 位，含 5 位小數
-- 特殊符號限制：僅限數字、小數點
-- 資料型態：DECIMAL(18, 5)，固定精度十進位數
-
-**timestamp**：
-- 約束：非空（NOT NULL），DEFAULT CURRENT_TIMESTAMP
-- 是否可重複：允許重複
-- 長度限制：TIMESTAMP，範圍 1970-01-01 00:00:01 到 2038-01-19 03:14:07 UTC
-- 特殊符號限制：格式 YYYY-MM-DD HH:MM:SS，僅限數字、連字符、冒號、空格
-- 資料型態：TIMESTAMP，時間戳型態，儲存日期和時間
-
-#### 舉例
-
-```
-id | user_id | crypto_id | transaction_type | amount           | price       | timestamp
----+---------+-----------+------------------+-----------------+-------------+-------------------------
-1  | 1       | 1         | buy              | 0.5000000000    | 58000.00000 | 2025-05-01 10:00:00
-2  | 2       | 2         | buy              | 10.0000000000   | 2900.00000  | 2025-05-02 12:00:00
-3  | 3       | 3         | buy              | 15.0000000000   | 590.00000   | 2025-05-03 14:30:00
-4  | 4       | 4         | buy              | 1000.0000000000 | 1.70000     | 2025-05-04 09:15:00
-5  | 5       | 5         | buy              | 5000.0000000000 | 0.90000     | 2025-05-05 11:45:00
-6  | 6       | 6         | buy              | 20.0000000000   | 140.00000   | 2025-05-06 16:20:00
-7  | 7       | 7         | sell             | 25.0000000000   | 21.00000    | 2025-05-07 08:00:00
-8  | 8       | 8         | buy              | 10000.0000000000| 0.30000     | 2025-05-08 13:10:00
-9  | 9       | 9         | sell             | 400.0000000000  | 1.25000     | 2025-05-09 15:25:00
-10 | 10      | 10        | buy              | 40.0000000000   | 24.00000    | 2025-05-10 17:50:00
-```
-## 5. 資料庫 Schema (SQL)
-
-### 創建資料表
-
+#### SQL
 ```sql
--- 使用者表
-CREATE TABLE users (
-    id INT NOT NULL AUTO_INCREMENT,
-    username VARCHAR(50) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    role VARCHAR(20) NOT NULL CHECK (role IN ('super_admin', 'admin', 'user')),
-    PRIMARY KEY (id),
-    UNIQUE (email)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- 使用者憑證表
-CREATE TABLE user_credentials (
-    user_id INT NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    PRIMARY KEY (user_id),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- 幣種表
-CREATE TABLE cryptos (
-    id INT NOT NULL AUTO_INCREMENT,
-    symbol VARCHAR(10) NOT NULL UNIQUE,
-    name VARCHAR(50) NOT NULL,
-    current_price DECIMAL(18, 5) NOT NULL CHECK (current_price >= 0),
-    PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- 歷史價格表
-CREATE TABLE crypto_prices (
-    crypto_id INT NOT NULL,
-    timestamp TIMESTAMP NOT NULL,
-    open_price DECIMAL(18, 5) NOT NULL CHECK (open_price >= 0),
-    high_price DECIMAL(18, 5) NOT NULL CHECK (high_price >= 0),
-    low_price DECIMAL(18, 5) NOT NULL CHECK (low_price >= 0),
-    close_price DECIMAL(18, 5) NOT NULL CHECK (close_price >= 0),
-    volume DECIMAL(20, 10) NOT NULL CHECK (volume >= 0),
-    PRIMARY KEY (crypto_id, timestamp),
-    FOREIGN KEY (crypto_id) REFERENCES cryptos(id) ON DELETE CASCADE,
-    INDEX idx_timestamp (timestamp)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- 持倉表
-CREATE TABLE holdings (
-    id INT NOT NULL AUTO_INCREMENT,
-    user_id INT NOT NULL,
-    crypto_id INT NOT NULL,
-    amount DECIMAL(20, 10) NOT NULL CHECK (amount >= 0),
-    avg_buy_price DECIMAL(18, 5) NOT NULL CHECK (avg_buy_price >= 0),
-    PRIMARY KEY (id),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (crypto_id) REFERENCES cryptos(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- 交易紀錄表
 CREATE TABLE transactions (
     id INT NOT NULL AUTO_INCREMENT,
     user_id INT NOT NULL,
@@ -564,18 +421,42 @@ CREATE TABLE transactions (
     FOREIGN KEY (crypto_id) REFERENCES cryptos(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
-## 6. 視圖 (View)
 
-### 6.1 使用者管理
-**需求**：
-- 註冊與登錄：電子郵件與密碼註冊、登錄，支援密碼重置。
-- 個人資料管理：查看與更新 username、email。
-- 區分一般使用者、管理員與超級管理員。
+#### 舉例
+
+```
+id | user_id | crypto_id | transaction_type | amount           | price       | timestamp
+---+---------+-----------+------------------+-----------------+-------------+-------------------------
+1  | 1       | 1         | buy              | 0.3000000000    | 64000.00000 | 2025-06-01 09:00:00
+2  | 2       | 2         | buy              | 8.0000000000    | 3100.00000  | 2025-06-01 10:00:00
+3  | 3       | 3         | buy              | 12.0000000000   | 600.00000   | 2025-06-02 11:00:00
+4  | 4       | 4         | buy              | 800.0000000000  | 2.00000     | 2025-06-02 12:00:00
+5  | 5       | 5         | buy              | 4000.0000000000 | 1.00000     | 2025-06-03 13:00:00
+6  | 6       | 6         | buy              | 15.0000000000   | 160.00000   | 2025-06-03 14:00:00
+7  | 7       | 7         | buy              | 40.0000000000   | 22.00000    | 2025-06-04 15:00:00
+8  | 8       | 8         | buy              | 8000.0000000000 | 0.38000     | 2025-06-04 16:00:00
+9  | 9       | 9         | buy              | 600.0000000000  | 1.30000     | 2025-06-05 17:00:00
+10 | 10      | 10        | buy              | 30.0000000000   | 28.00000    | 2025-06-05 18:00:00
+11 | 4       | 2         | sell             | 2.0000000000    | 3200.00000  | 2025-06-06 09:00:00
+12 | 5       | 1         | buy              | 0.2000000000    | 64500.00000 | 2025-06-06 10:00:00
+13 | 6       | 3         | sell             | 5.0000000000    | 620.00000   | 2025-06-07 11:00:00
+14 | 7       | 4         | buy              | 500.0000000000  | 2.10000     | 2025-06-07 12:00:00
+15 | 8       | 5         | buy              | 3000.0000000000 | 1.02000     | 2025-06-08 13:00:00
+```
+## 5. 視圖 (View)
+
+### 5.1 使用者管理
+
+#### 需求
+- **註冊與登錄**：支援電子郵件與密碼註冊、登錄，包含密碼重置功能。
+- **個人資料管理**：允許使用者查看與更新 username、email。
+- **角色區分**：支援一般使用者、管理員與超級管理員的權限分級。
 
 #### 使用者資料視圖（v_user_profile）
+
 - **用途**：
-  - 為一般使用者提供個人資料檢視，支援查看與更新 `username` 和 `email`。
-  - 管理員與超級管理員可查詢所有用戶資料，支援用戶管理。
+  - 允許使用者查看和更新個人資料（username、email）。
+  - 管理員和超級管理員可檢視所有用戶資料，進行角色管理或用戶監控。
 - **基於表**：`users`
 - **欄位**：
   - user_id (INT)：用戶 ID
@@ -593,36 +474,51 @@ CREATE TABLE transactions (
   FROM users;
   ```
 - **應用場景**：
-  - **一般使用者**：查看自身資料：
+  - **一般使用者**：查看個人資料：
     ```sql
-    SELECT * FROM v_user_profile WHERE user_id = ?;
+    SELECT * FROM v_user_profile WHERE user_id = 4;
     ```
-  - **管理員**：檢視用戶清單：
+    **範例結果**：
+    ```
+    user_id | username    | email                  | role
+    --------+------------+------------------------+------
+    4       | emily_chen | emily.chen@example.com | user
+    ```
+    **說明**：使用者 `emily_chen` 查看自己的 username、email 和角色，用於個人資料頁面顯示或更新。
+  - **管理員**：檢視普通用戶清單：
     ```sql
     SELECT * FROM v_user_profile WHERE role = 'user';
     ```
-  - **超級管理員**：分配角色：
-    ```sql
-    SELECT * FROM v_admin_users ORDER BY user_id;
+    **範例結果**：
     ```
+    user_id | username      | email                     | role
+    --------+---------------+---------------------------+------
+    4       | emily_chen    | emily.chen@example.com    | user
+    5       | michael_lee   | michael.lee@example.com   | user
+    6       | sarah_kim     | sarah.kim@example.com     | user
+    7       | david_park    | david.park@example.com    | user
+    8       | laura_wu      | laura.wu@example.com      | user
+    9       | chris_tan     | chris.tan@example.com     | user
+    10      | sophia_liu    | sophia.liu@example.com    | user
+    ```
+    **說明**：管理員篩選所有普通用戶，檢查用戶狀態或進行批量操作。
 - **說明**：
   - 簡化個人資料查詢，隱藏底層結構，符合個人資料管理需求。
-  - 支援權限分級限制存取。
-  - 提供管理者管理介面。
+  - 支援權限分級存取，方便角色管理。
 
+### 5.2 資產管理
 
-### 6.2 資產管理
-**需求**：
+#### 需求
 - 查看當前持有的所有幣種及其數量。
 - 計算每種投資幣種的盈虧。
 - 新增或移除持有的幣種。
 - 查看投資分析報告。
 
 #### (1) 持倉概覽視圖（v_user_holdings）
+
 - **用途**：
-  - 為一般使用者提供持倉詳情，顯示數量、市值、均價與盈虧。
-  - 支援實時追蹤，計算最新市值與盈虧。
-  - 管理員與超級管理員可監控用戶持倉。
+  - 為使用者顯示持倉詳情，包括持有數量、市值和盈虧。
+  - 管理員可監控用戶持倉，識別高價值投資或異常持倉。
 - **基於表**：`holdings`、`cryptos`
 - **欄位**：
   - user_id (INT)：用戶 ID
@@ -649,28 +545,41 @@ CREATE TABLE transactions (
   JOIN cryptos c ON h.crypto_id = c.id;
   ```
 - **應用場景**：
-  - **一般使用者**：查看持倉：
+  - **一般使用者**：查看個人持倉：
     ```sql
-    SELECT * FROM v_user_holdings WHERE user_id = ? ORDER BY market_value DESC;
+    SELECT * FROM v_user_holdings WHERE user_id = 4 ORDER BY market_value DESC;
     ```
+    **範例結果**：
+    ```
+    user_id | crypto_id | symbol | amount         | avg_buy_price | current_price | market_value     | profit_loss
+    --------+-----------+--------+---------------+---------------+---------------+------------------+-------------
+    4       | 2         | ETH    | 5.0000000000  | 3150.00000    | 3200.50000    | 16002.5000000000 | 252.5000000000
+    4       | 4         | ADA    | 800.0000000000| 2.00000       | 2.15000       | 1720.0000000000  | 120.0000000000
+    ```
+    **說明**：使用者 `emily_chen` 持有 ETH 和 ADA，市值分別為 16002.50 USD 和 1720 USD，盈虧分別為 252.50 USD 和 120 USD。
   - **管理員**：監控大額持倉：
     ```sql
-    SELECT * FROM v_user_holdings WHERE market_value > 1000000;
+    SELECT * FROM v_user_holdings WHERE market_value > 10000;
     ```
-  - **報告生成**：計算總市值：
-    ```sql
-    SELECT SUM(market_value) AS total_value, SUM(profit_loss) AS total_profit
-    FROM v_user_holdings WHERE user_id = ?;
+    **範例結果**：
     ```
+    user_id | crypto_id | symbol | amount         | avg_buy_price | current_price | market_value     | profit_loss
+    --------+-----------+--------+---------------+---------------+---------------+------------------+-------------
+    1       | 1         | BTC    | 0.3000000000  | 64000.00000   | 65000.75000   | 19500.2250000000 | 300.2250000000
+    2       | 2         | ETH    | 8.0000000000  | 3100.00000    | 3200.50000    | 25604.0000000000 | 804.0000000000
+    4       | 2         | ETH    | 5.0000000000  | 3150.00000    | 3200.50000    | 16002.5000000000 | 252.5000000000
+    5       | 1         | BTC    | 0.2000000000  | 64500.00000   | 65000.75000   | 13000.1500000000 | 100.1500000000
+    ```
+    **說明**：管理員篩選市值超過 10000 USD 的持倉，檢查高價值投資。
 - **說明**：
   - 整合持倉與行情數據，計算市值與盈虧，滿足持倉追蹤需求。
-  - 支援新增/移除幣種的後續操作，簡化報告生成。
+  - 支援新增/移除幣種操作，簡化報告生成。
 
 #### (2) 投資表現視圖（v_user_investment_performance）
+
 - **用途**：
-  - 提供投資表現分析，顯示收益與投資回報率（ROI）。
-  - 結合歷史價格計算特定時間段的收益。
-  - 支援管理員分析用戶投資表現。
+  - 提供投資表現分析，計算當前盈虧、歷史盈虧和投資回報率（ROI）。
+  - 管理員可分析用戶投資表現，生成統計報告。
 - **基於表**：`holdings`、`cryptos`、`crypto_prices`
 - **欄位**：
   - user_id (INT)：用戶 ID
@@ -719,26 +628,50 @@ CREATE TABLE transactions (
 - **應用場景**：
   - **一般使用者**：查看投資表現：
     ```sql
-    SELECT * FROM v_user_investment_performance WHERE user_id = ?;
+    SELECT * FROM v_user_investment_performance WHERE user_id = 2;
     ```
-  - **管理員**：分析投資：
+    **範例結果**（假設 30 天前 ETH 收盤價為 3000.00000）：
+    ```
+    user_id | crypto_id | symbol | amount        | avg_buy_price | current_price | historical_price | current_profit | historical_profit | roi
+    --------+-----------+--------+--------------+---------------+---------------+------------------+---------------+------------------+------
+    2       | 2         | ETH    | 8.0000000000 | 3100.00000    | 3200.50000    | 3000.00000       | 804.0000000000 | -800.0000000000  | 3.24
+    ```
+    **說明**：使用者 `jane_smith` 持有 8 ETH，當前盈虧 804 USD，30 天前盈虧 -800 USD，ROI 為 3.24%。
+  - **管理員**：分析投資表現：
     ```sql
-    SELECT SUM(current_profit) AS total_profit, AVG(roi) AS avg_roi
-    FROM v_user_investment_performance GROUP BY user_id;
+    SELECT user_id, SUM(current_profit) AS total_profit, AVG(roi) AS avg_roi
+    FROM v_user_investment_performance 
+    GROUP BY user_id;
     ```
+    **範例結果**（簡化假設部分數據）：
+    ```
+    user_id | total_profit     | avg_roi
+    --------+-----------------+--------
+    1       | 300.2250000000  | 1.56
+    2       | 804.0000000000  | 3.24
+    3       | 243.0000000000  | 3.37
+    4       | 372.5000000000  | 3.93
+    5       | 250.1500000000  | 2.45
+    6       | 87.0000000000   | 3.62
+    7       | 80.0000000000   | 2.86
+    8       | 180.0000000000  | 3.15
+    ```
+    **說明**：管理員查看每個用戶的總盈虧和平均 ROI，識別高回報用戶或潛在風險。
 - **說明**：
   - 計算當前與歷史收益，支援 ROI 分析，滿足投資表現需求。
   - 提供自訂時間範圍的基礎，簡化報告生成邏輯。
 
-### 6.3 交易紀錄
-**需求**：
+### 5.3 交易紀錄
+
+#### 需求
 - 記錄買入與賣出交易（幣種、數量、價格、時間）。
 - 提供交易歷史查詢功能。
 
 #### 交易歷史視圖（v_user_transactions）
+
 - **用途**：
-  - 為一般使用者提供交易歷史查詢，顯示買入/賣出詳情。
-  - 管理員與超級管理員可監控所有交易。
+  - 為使用者提供交易歷史查詢，顯示買入/賣出詳情。
+  - 管理員監控交易活動，特別是大額或異常交易。
 - **基於表**：`transactions`、`cryptos`、`users`
 - **欄位**：
   - transaction_id (INT)：交易 ID
@@ -770,31 +703,49 @@ CREATE TABLE transactions (
   JOIN cryptos c ON t.crypto_id = c.id;
   ```
 - **應用場景**：
-  - **一般使用者**：查看交易：
+  - **一般使用者**：查看近期交易：
     ```sql
     SELECT * FROM v_user_transactions 
-    WHERE user_id = ? AND timestamp BETWEEN ? AND ? 
+    WHERE user_id = 4 AND timestamp BETWEEN '2025-06-01' AND '2025-06-08'
     ORDER BY timestamp DESC;
     ```
-  - **管理員**：監控交易：
+    **範例結果**：
+    ```
+    transaction_id | user_id | username    | crypto_id | symbol | transaction_type | amount         | price     | total_cost      | timestamp
+    --------------+---------+------------+-----------+--------+-----------------+---------------+-----------+----------------+-------------------------
+    11            | 4       | emily_chen | 2         | ETH    | sell            | 2.0000000000  | 3200.00000| 6400.0000000000 | 2025-06-06 09:00:00
+    4             | 4       | emily_chen | 4         | ADA    | buy             | 800.0000000000| 2.00000   | 1600.0000000000 | 2025-06-02 12:00:00
+    ```
+    **說明**：使用者 `emily_chen` 查看 6 月初的交易記錄，包含買入 800 ADA 和賣出 2 ETH。
+  - **管理員**：監控大額交易：
     ```sql
     SELECT * FROM v_user_transactions 
-    WHERE total_cost > 100000 
+    WHERE total_cost > 10000 
     ORDER BY timestamp DESC;
     ```
+    **範例結果**：
+    ```
+    transaction_id | user_id | username    | crypto_id | symbol | transaction_type | amount        | price      | total_cost      | timestamp
+    --------------+---------+------------+-----------+--------+-----------------+--------------+------------+----------------+-------------------------
+    12            | 5       | michael_lee| 1         | BTC    | buy             | 0.2000000000 | 64500.00000| 12900.0000000000 | 2025-06-06 10:00:00
+    1             | 1       | john_doe   | 1         | BTC    | buy             | 0.3000000000 | 64000.00000| 19200.0000000000 | 2025-06-01 09:00:00
+    ```
+    **說明**：管理員篩選總成本超過 10000 USD 的交易，監控大額買賣行為。
 - **說明**：
   - 整合交易與用戶、幣種資訊，計算總成本，滿足交易查詢需求。
   - 支援管理員監控大額交易，符合權限設定。
 
-### 6.4 市場資訊與分析
-**需求**：
-- 實時行情：查看幣種價格、24小時漲跌幅。
-- 歷史價格：查看 K 線圖（1小時、4小時、日線），計算技術指標。
+### 5.4 市場資訊與分析
+
+#### 需求
+- **實時行情**：查看幣種價格、24 小時漲跌幅。
+- **歷史價格**：查看 K 線圖（1 小時、4 小時、日線），計算技術指標。
 
 #### (1) 實時行情視圖（v_market_realtime）
+
 - **用途**：
-  - 提供即時行情，顯示價格與 24 小時漲跌幅。
-  - 支援管理員監控市場動態。
+  - 提供即時幣種價格和 24 小時漲跌幅，供使用者參考交易決策。
+  - 管理員監控市場動態，識別異常波動。
 - **基於表**：`cryptos`、`crypto_prices`
 - **欄位**：
   - crypto_id (INT)：幣種 ID
@@ -838,22 +789,49 @@ CREATE TABLE transactions (
   FROM cryptos c;
   ```
 - **應用場景**：
-  - **一般使用者**：查看行情：
+  - **一般使用者**：查看市場行情：
     ```sql
     SELECT * FROM v_market_realtime ORDER BY price_change_24h DESC;
     ```
-  - **管理員**：監控市場：
-    ```sql
-    SELECT * FROM v_market_realtime WHERE ABS(price_change_24h) > 10;
+    **範例結果**（假設 24 小時前價格：BTC=64000, ETH=3100, BNB=600）：
     ```
+    crypto_id | symbol | name            | current_price | price_24h_ago | price_change_24h
+    ----------+--------+-----------------+---------------+---------------+-----------------
+    1         | BTC    | Bitcoin         | 65000.75000   | 64000.00000   | 1.56
+    2         | ETH    | Ethereum        | 3200.50000    | 3100.00000    | 3.24
+    3         | BNB    | Binance Coin    | 620.25000     | 600.00000     | 3.38
+    4         | ADA    | Cardano         | 2.15000       | 2.15000       | 0.00
+    5         | XRP    | Ripple          | 1.05000       | 1.05000       | 0.00
+    6         | SOL    | Solana          | 165.80000     | 165.80000     | 0.00
+    7         | DOT    | Polkadot        | 22.75000      | 22.75000      | 0.00
+    8         | DOGE   | Dogecoin        | 0.40000       | 0.40000       | 0.00
+    9         | MATIC  | Polygon         | 1.35000       | 1.35000       | 0.00
+    10        | LINK   | Chainlink       | 28.90000      | 28.90000      | 0.00
+    11        | SHIB   | Shiba Inu       | 0.00002500    | 0.00002500    | 0.00
+    12        | LTC    | Litecoin        | 180.60000     | 180.60000     | 0.00
+    ```
+    **說明**：使用者查看所有幣種的當前價格和 24 小時漲跌幅，BNB 漲幅最高（3.38%）。
+  - **管理員**：監控劇烈波動：
+    ```sql
+    SELECT * FROM v_market_realtime WHERE ABS(price_change_24h) > 3;
+    ```
+    **範例結果**：
+    ```
+    crypto_id | symbol | name            | current_price | price_24h_ago | price_change_24h
+    ----------+--------+-----------------+---------------+---------------+-----------------
+    2         | ETH    | Ethereum        | 3200.50000    | 3100.00000    | 3.24
+    3         | BNB    | Binance Coin    | 620.25000     | 600.00000     | 3.38
+    ```
+    **說明**：管理員篩選漲跌幅超過 3% 的幣種，關注市場異常。
 - **說明**：
   - 計算 24 小時漲跌幅，滿足實時行情需求。
   - 支援排序與篩選，方便識別市場動態。
 
 #### (2) K 線圖視圖（v_kline_data）
+
 - **用途**：
-  - 提供歷史價格數據，支援 K 線圖與技術指標計算。
-  - 管理員可分析市場趨勢。
+  - 提供歷史價格數據，支援 K 線圖生成和技術指標計算。
+  - 管理員分析市場趨勢，評估交易量。
 - **基於表**：`crypto_prices`、`cryptos`
 - **欄位**：
   - crypto_id (INT)：幣種 ID
@@ -883,52 +861,68 @@ CREATE TABLE transactions (
   - **一般使用者**：生成 K 線圖：
     ```sql
     SELECT * FROM v_kline_data 
-    WHERE crypto_id = 1 AND timestamp >= '2025-06-01' 
+    WHERE crypto_id = 1 AND timestamp >= '2025-06-09' 
     ORDER BY timestamp;
     ```
-  - **技術指標**：計算 RSI：
-    ```sql
-    SELECT close_price 
-    FROM v_kline_data 
-    WHERE crypto_id = 1 
-    ORDER BY timestamp DESC LIMIT 14;
+    **範例結果**：
     ```
-  - **管理員**：分析市場：
+    crypto_id | symbol | timestamp            | open_price  | high_price  | low_price   | close_price | volume
+    ----------+--------+---------------------+-------------+-------------+-------------+-------------+----------------
+    1         | BTC    | 2025-06-09 10:00:00 | 64800.50000 | 65100.75000 | 64700.25000 | 65000.30000 | 150.2500000000
+    1         | BTC    | 2025-06-09 11:00:00 | 65000.30000 | 65250.00000 | 64950.10000 | 65050.45000 | 180.5000000000
+    ```
+    **說明**：使用者查詢 BTC 的歷史價格，生成 1 小時 K 線圖。
+  - **管理員**：分析交易量：
     ```sql
     SELECT symbol, AVG(volume) AS avg_volume 
     FROM v_kline_data 
     WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 7 DAY)
     GROUP BY crypto_id, symbol;
     ```
+    **範例結果**：
+    ```
+    symbol | avg_volume
+    -------+--------------------
+    BTC    | 165.3750000000
+    ETH    | 575.3750000000
+    BNB    | 2400.2500000000
+    ADA    | 115000.0000000000
+    XRP    | 590000.0000000000
+    SOL    | 1950.2500000000
+    DOT    | 14500.0000000000
+    DOGE   | 975000.0000000000
+    MATIC  | 77500.0000000000
+    LINK   | 4900.0000000000
+    ```
+    **說明**：管理員計算過去 7 天的平均交易量，DOGE 和 XRP 交易量較高。
 - **說明**：
   - 支援 K 線圖與技術指標，滿足歷史價格需求。
-  - 結合 `cryptos.symbol` 提升顯示友好性。
+  - 提供交易量分析，幫助管理員評估市場活躍度。
 
-### 6.5 視圖總覽與權限
+### 5.5 視圖總覽與權限
 
 | 視圖名稱                     | 功能需求         | 適用角色                     | 基於表                        |
 |------------------------------|------------------|------------------------------|-------------------------------|
-| v_user_profile              | 使用者管理       | User, Admin, Super Admin     | users                         |                       
+| v_user_profile              | 使用者管理       | User, Admin, Super Admin     | users                         |
 | v_user_holdings             | 資產管理         | User, Admin, Super Admin     | holdings, cryptos             |
 | v_user_investment_performance | 資產管理       | User, Admin, Super Admin     | holdings, cryptos, crypto_prices |
 | v_user_transactions         | 交易紀錄         | User, Admin, Super Admin     | transactions, users, cryptos  |
 | v_market_realtime           | 市場資訊與分析   | User, Admin, Super Admin     | cryptos, crypto_prices        |
 | v_kline_data                | 市場資訊與分析   | User, Admin, Super Admin     | crypto_prices, cryptos        |
 
+## 6. 團隊分工
 
-## 7. 團隊分工
+* **組長**：王忠仁（[boxcat-none](https://github.com/boxcat-none)）
+  **工作內容**：全部
 
-* **組長**：王忠仁（boxcat-none）
-  **工作內容**：自我介紹、功能特色、系統需求、資料庫結構、完整性限制說明、舉例、資料庫Schema(SQL)、視圖(View)
-
-* **組員**：張家誠（Adsgfjhk）
+* **組員**：張家誠（[Adsgfjhk](https://github.com/Adsgfjhk)）
   **工作內容**：自我介紹、ER Diagram、功能特色、系統需求
 
-* **組員**：劉向宏（liuleo0518）
+* **組員**：劉向宏（[liuleo0518](https://github.com/liuleo0518)）
   **工作內容**：自我介紹、資料庫結構、舉例、完整性限制說明
 ---
 
-## 8. 報告連結
+## 7. 報告連結
 
-## 9. 參考資料
+## 8. 參考資料
 * 使用Grok完成部分說明
