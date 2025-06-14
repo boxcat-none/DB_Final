@@ -35,6 +35,7 @@
   - [5.4 市場資訊與分析](#54-市場資訊與分析)
     - [(1) 實時行情視圖（v_market_realtime）](#1-實時行情視圖v_market_realtime)
     - [(2) K 線圖視圖（v_kline_data）](#2-k-線圖視圖v_kline_data)
+    - [(3) 日平均線視圖（v_daily_sma）](#3-日平均線視圖v_daily_sma)
   - [5.5 視圖總覽與權限](#55-視圖總覽與權限)
 - [6. 團隊分工](#6-團隊分工)
 - [7. 報告連結](#7-報告連結)
@@ -116,6 +117,16 @@
 ## 3. ER Diagram
 
 ![ER Diagram](./ER_Diagram.png)
+### 關係說明
+
+| 關係            | 關係名稱 | 類型   | 描述                                                                 | 外鍵                        |
+|-----------------|----------|--------|----------------------------------------------------------------------|-----------------------------|
+| `user` - `holdings` | `own`   | 1:N    | 一個 `user` 可以擁有多個 `holdings`，但每個 `holdings` 只屬於一個 `user`。 | `user_id` 在 `holdings` 中，參照 `user.id` |
+| `user` - `transactions` | `trade` | 1:N    | 一個 `user` 可以進行多筆 `transactions`，但每筆 `transactions` 只由一個 `user` 執行。 | `user_id` 在 `transactions` 中，參照 `user.id` |
+| `holdings` - `cryptos` | `possess` | N:1    | 多個 `holdings` 可以對應同一個 `cryptos`，但每個 `holdings` 只持有單一 `cryptos`。 | `crypto_id` 在 `holdings` 中，參照 `cryptos.id` |
+| `transactions` - `cryptos` | `involve` | N:1    | 多筆 `transactions` 可以涉及同一個 `cryptos`，但每筆 `transactions` 只涉及單一 `cryptos`。 | `crypto_id` 在 `transactions` 中，參照 `cryptos.id` |
+| `crypto_prices` - `cryptos` | `track` | N:1    | 多筆 `crypto_prices` 記錄對應同一個 `cryptos`，但每筆 `crypto_prices` 只屬於單一 `cryptos`。 | `crypto_id` 在 `crypto_prices` 中，參照 `cryptos.id` |
+
 
 ## 4. 資料庫Schema及完整性限制
 
@@ -899,6 +910,90 @@ id | user_id | crypto_id | transaction_type | amount           | price       | t
   - 支援 K 線圖與技術指標，滿足歷史價格需求。
   - 提供交易量分析，幫助管理員評估市場活躍度。
 
+#### (3) 日平均線視圖（v_daily_sma）
+
+- **用途**：
+  - 提供每日收盤價數據及 7 天、14 天、30 天簡單移動平均線（SMA），支援日平均線圖的繪製。
+  - 管理員分析市場趨勢，評估長期或短期價格平滑趨勢。
+- **基於表**：`crypto_prices`、`cryptos`
+- **欄位**：
+  - crypto_id (INT)：幣種 ID
+  - symbol (VARCHAR)：幣種代號
+  - date (DATE)：日期
+  - close_price (DECIMAL(18,5))：當日收盤價
+  - sma_7 (DECIMAL(18,5))：7 天簡單移動平均線
+  - sma_14 (DECIMAL(18,5))：14 天簡單移動平均線
+  - sma_30 (DECIMAL(18,5))：30 天簡單移動平均線
+- **SQL**：
+  ```sql
+  CREATE VIEW v_daily_sma AS
+  SELECT 
+      cp.crypto_id,
+      c.symbol,
+      DATE(cp.timestamp) AS date,
+      MAX(cp.close_price) AS close_price,
+      AVG(cp.close_price) OVER (
+          PARTITION BY cp.crypto_id 
+          ORDER BY DATE(cp.timestamp)
+          ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+      ) AS sma_7,
+      AVG(cp.close_price) OVER (
+          PARTITION BY cp.crypto_id 
+          ORDER BY DATE(cp.timestamp)
+          ROWS BETWEEN 13 PRECEDING AND CURRENT ROW
+      ) AS sma_14,
+      AVG(cp.close_price) OVER (
+          PARTITION BY cp.crypto_id 
+          ORDER BY DATE(cp.timestamp)
+          ROWS BETWEEN 29 PRECEDING AND CURRENT ROW
+      ) AS sma_30
+  FROM crypto_prices cp
+  JOIN cryptos c ON cp.crypto_id = c.id
+  WHERE HOUR(cp.timestamp) = 23 AND MINUTE(cp.timestamp) = 59
+  GROUP BY cp.crypto_id, c.symbol, DATE(cp.timestamp);
+  ```
+- **應用場景**：
+  - **一般使用者**：生成日平均線圖：
+    ```sql
+    SELECT * FROM v_daily_sma 
+    WHERE crypto_id = 1 AND date >= '2025-06-09' 
+    ORDER BY date;
+    ```
+    **範例結果**：
+    ```
+    crypto_id | symbol | date       | close_price | sma_7      | sma_14     | sma_30
+    ----------+--------+------------+-------------+------------+------------+------------
+    1         | BTC    | 2025-06-09 | 65000.30000 | 64500.25000| 64000.75000| 63500.50000
+    1         | BTC    | 2025-06-10 | 65100.45000 | 64600.40000| 64100.90000| 63600.60000
+    ```
+    **說明**：使用者查詢 BTC 的日線數據與 7 天、14 天、30 天 SMA，用於繪製日平均線圖，分析價格趨勢。
+  - **管理員**：分析多幣種 SMA 趨勢：
+    ```sql
+    SELECT symbol, AVG(sma_30) AS avg_sma_30 
+    FROM v_daily_sma 
+    WHERE date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+    GROUP BY crypto_id, symbol;
+    ```
+    **範例結果**：
+    ```
+    symbol | avg_sma_30
+    -------+------------
+    BTC    | 63500.50000
+    ETH    | 3100.75000
+    BNB    | 600.25000
+    ADA    | 2.10000
+    XRP    | 1.03000
+    SOL    | 160.50000
+    DOT    | 22.30000
+    DOGE   | 0.39000
+    MATIC  | 1.32000
+    LINK   | 28.50000
+    ```
+    **說明**：管理員計算過去 7 天各幣種的 30 天 SMA 平均值，評估市場長期趨勢。
+- **說明**：
+  - 支援日平均線圖繪製與技術分析，滿足歷史價格趨勢需求。
+  - 提供 SMA 數據，幫助管理員評估市場穩定性與趨勢。
+
 ### 5.5 視圖總覽與權限
 
 | 視圖名稱                     | 功能需求         | 適用角色                     | 基於表                        |
@@ -909,6 +1004,7 @@ id | user_id | crypto_id | transaction_type | amount           | price       | t
 | v_user_transactions         | 交易紀錄         | User, Admin, Super Admin     | transactions, users, cryptos  |
 | v_market_realtime           | 市場資訊與分析   | User, Admin, Super Admin     | cryptos, crypto_prices        |
 | v_kline_data                | 市場資訊與分析   | User, Admin, Super Admin     | crypto_prices, cryptos        |
+| v_daily_sma                 | 市場資訊與分析   | User, Admin, Super Admin     | crypto_prices, cryptos        |
 
 ## 6. 團隊分工
 
