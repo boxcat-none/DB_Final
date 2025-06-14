@@ -1012,14 +1012,16 @@ id | user_id | crypto_id | transaction_type | amount           | price       | t
   **工作內容**：全部
 
 * **組員**：張家誠（[Adsgfjhk](https://github.com/Adsgfjhk)）
-  **工作內容**：自我介紹、Schema Diagram、功能特色、系統需求
+ ：自我介紹、Schema Diagram、功能特色、系統需求
 
 * **組員**：劉向宏（[liuleo0518](https://github.com/liuleo0518)）
   **工作內容**：自我介紹、資料庫結構、舉例、完整性限制說明、ER Diagram
 ---
 
 ## 7. 報告連結
-https://nfuedu-my.sharepoint.com/:w:/g/personal/41143231_nfu_edu_tw/EUm599hBQENMkZVCvDX-52oBe6sfP8zb4xO99x5_HHQ1Iw?e=U0ZOfv
-
+ **線上期末報告WORD**:https://nfuedu-my.sharepoint.com/:w:/g/personal/41143231_nfu_edu_tw/EUm599hBQENMkZVCvDX-52oBe6sfP8zb4xO99x5_HHQ1Iw?e=U0ZOfv
+ **期末報告WORD**:DB期末報告.docx
+ **期末報告PDF**:DB期末報告.pdf
+---
 ## 8. 參考資料
 * 使用Grok完成部分說明
