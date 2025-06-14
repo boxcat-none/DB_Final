@@ -1020,8 +1020,8 @@ id | user_id | crypto_id | transaction_type | amount           | price       | t
 
 ## 7. 報告連結
  **線上期末報告WORD**:https://nfuedu-my.sharepoint.com/:w:/g/personal/41143231_nfu_edu_tw/EUm599hBQENMkZVCvDX-52oBe6sfP8zb4xO99x5_HHQ1Iw?e=U0ZOfv
- **期末報告WORD**:(./DB期末報告_.docx)
- **期末報告PDF**:(./DB期末專題.pdf)
+- [DB期末報告.word](DB期末報告_.doxc)
+- [DB期末報告.pdf](DB期末報告.pdf)
 ---
 ## 8. 參考資料
 * 使用Grok完成部分說明
