@@ -1020,9 +1020,10 @@ id | user_id | crypto_id | transaction_type | amount           | price       | t
 
 ## 7. 報告連結
 - **線上期末報告WORD**:https://nfuedu-my.sharepoint.com/:w:/g/personal/41143231_nfu_edu_tw/EUm599hBQENMkZVCvDX-52oBe6sfP8zb4xO99x5_HHQ1Iw?e=U0ZOfv
+- [線上期末報告WORD](https://nfuedu-my.sharepoint.com/:w:/g/personal/41143231_nfu_edu_tw/EUm599hBQENMkZVCvDX-52oBe6sfP8zb4xO99x5_HHQ1Iw?e=U0ZOfv)
 - [DB期末報告.word](DB期末報告_.docx)
 - [DB期末報告.pdf](DB期末報告.pdf)
-- [線上期末簡報PPT](https://www.canva.com/design/DAGpWfQl5bU/o1DjUeVFEnktsXruYnKdWA/edit?utm_content=DAGpWfQl5bU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton).
+- [線上期末簡報PPT](https://www.canva.com/design/DAGpWfQl5bU/o1DjUeVFEnktsXruYnKdWA/edit?utm_content=DAGpWfQl5bU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
  - [PPT期末報告檔案.pdf](DB期末專題.pdf)
 ---
 ## 8. 參考資料
